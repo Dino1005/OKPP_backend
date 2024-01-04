@@ -1,5 +1,4 @@
 ﻿using Firebase.Auth;
-using Newtonsoft.Json.Linq;
 
 namespace WebAPI.Authentication
 {

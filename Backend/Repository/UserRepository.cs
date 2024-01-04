@@ -25,8 +25,21 @@ namespace Repository
         public async Task<bool> CreateUserAsync(User user) 
         {
             DocumentReference documentReference = database.db.Collection("user").Document(user.Id);
-            var test = await documentReference.SetAsync(User.MapUserToDictionary(user));
-            if(test != null)
+            var result = await documentReference.SetAsync(User.MapUserToDictionary(user));
+            if(result != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateUserAsync(User user)
+        {
+            DocumentReference documentReference = database.db.Collection("user").Document(user.Id);
+
+            var result = await documentReference.SetAsync(User.MapUserToDictionary(user));
+            if (result != null)
             {
                 return true;
             }

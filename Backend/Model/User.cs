@@ -4,7 +4,7 @@ namespace Model
 {
     public class User
     {
-        public User(string id, string address, string city, DateTime dob, string firstName, string lastName, List<string> preferences)
+        public User(string id, string address, string city, DateTime dob, string firstName, string lastName, List<string> eventTypeIds)
         {
             Id = id;
             Address = address;
@@ -12,12 +12,7 @@ namespace Model
             Dob = dob;
             FirstName = firstName;
             LastName = lastName;
-            Preferences = preferences;
-        }
-
-        public User()
-        {
-                
+            EventTypeIds = eventTypeIds;
         }
 
         public string Id { get; set; }
@@ -26,20 +21,20 @@ namespace Model
         public DateTime Dob {  get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<string> Preferences { get; set; }
+        public List<string> EventTypeIds { get; set; }
+        public List<EventType> EventTypes { get; set; }
+        public List<Event> Events { get; set; }
 
         public static User MapDictionaryToUser(Dictionary<string, object> dictionary)
         {
-            return new User
-            {
-                Id = dictionary["id"].ToString(),
-                Address = dictionary["address"].ToString(),
-                City = dictionary["city"].ToString(),
-                Dob = ((Timestamp)dictionary["dob"]).ToDateTime(),
-                FirstName = dictionary["firstName"].ToString(),
-                LastName = dictionary["lastName"].ToString(),
-                Preferences = ((List<object>)dictionary["preferences"]).Select(o => o.ToString()).ToList()
-            };
+            return new User(dictionary["id"].ToString(),
+                dictionary["address"].ToString(),
+                dictionary["city"].ToString(),
+                ((Timestamp)dictionary["dob"]).ToDateTime(),
+                dictionary["firstName"].ToString(),
+                dictionary["lastName"].ToString(),
+                ((List<object>)dictionary["eventTypeIds"]).Select(o => o.ToString()).ToList()
+            );
         }
 
         public static Dictionary<string, object> MapUserToDictionary(User user) 
@@ -52,7 +47,7 @@ namespace Model
                 { "dob", user.Dob },
                 { "firstName", user.FirstName },
                 { "lastName", user.LastName },
-                { "preferences", user.Preferences }
+                { "eventTypeIds", user.EventTypeIds }
             };
         }
     }

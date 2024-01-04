@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
                         Dob = (DateTime)(user?.Dob),
                         FirstName = user?.FirstName,
                         LastName = user?.LastName,
-                        Preferences = user?.Preferences
+                        EventTypeIds = user?.EventTypeIds
                     };
 
                     return Ok(result);
@@ -94,7 +94,7 @@ namespace WebAPI.Controllers
                     };
                     await FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(userCredentials.User.Uid, claims);
 
-                    Model.User user = new Model.User(userCredentials.User.Uid, model.Address, model.City, model.Dob, model.FirstName, model.LastName, model.Preferences);
+                    Model.User user = new Model.User(userCredentials.User.Uid, model.Address, model.City, model.Dob, model.FirstName, model.LastName, model.EventTypeIds);
 
                     await userService.CreateUserAsync(user);
 
@@ -133,7 +133,7 @@ namespace WebAPI.Controllers
 
         public string LastName { get; set; }
 
-        public List<string> Preferences { get; set; }
+        public List<string> EventTypeIds { get; set; }
 
     }
 
@@ -169,6 +169,6 @@ namespace WebAPI.Controllers
         [Required]
         public string LastName { get; set; }
 
-        public List<string> Preferences { get; set; }
+        public List<string> EventTypeIds { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 using Service;
 
 namespace WebAPI.Controllers
@@ -30,7 +31,7 @@ namespace WebAPI.Controllers
         }
 
         [Authorize(Roles = "user, admin")]
-        [Route("users({id}")]
+        [Route("users/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetUserByIdAsync(string id)
         {
@@ -43,5 +44,42 @@ namespace WebAPI.Controllers
 
             return BadRequest("User not found.");
         }
+
+        [Authorize(Roles = "user, admin")]
+        [Route("users/{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserAsync(string id, UserREST user)
+        {
+            var existingUser = await userService.GetUserByIdAsync(id);
+
+            if (existingUser == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            var result = await userService.UpdateUserAsync(new User(id, user.Address, user.City, user.Dob, user.FirstName, user.LastName, user.EventTypeIds));
+
+            if (result)
+            {
+                return Ok(user);
+            }
+
+            return BadRequest("User not updated.");
+        }
+    }
+
+    public class UserREST
+    {
+        public string Address { get; set; }
+
+        public string City { get; set; }
+
+        public DateTime Dob { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public List<string> EventTypeIds { get; set; }
     }
 }

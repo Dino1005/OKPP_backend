@@ -28,5 +28,12 @@ namespace Repository
 
             return snapshot.Exists ? snapshot.ToDictionary() : null;
         }
+
+        public async Task<List<Dictionary<string, object>>> GetByIds(string collection, List<string> ids)
+        {
+            var entities = await GetAll(collection);
+
+            return entities.Where(e => ids.Contains(e["id"].ToString())).ToList();
+        }
     }
 }
