@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
         }
 
         [Authorize(Roles = "user, admin")]
-        [Route("attendance")]
+        [Route("attendances")]
         [HttpPost]
         public async Task<IActionResult> CreateAttendanceAsync(AttendanceREST attendance)
         {

@@ -26,7 +26,7 @@ namespace Model
             );
         }
 
-        public static Dictionary<string, object> MapEventToDictionary(Comment comment) 
+        public static Dictionary<string, object> MapCommentToDictionary(Comment comment) 
         {
             return new Dictionary<string, object>
             {
