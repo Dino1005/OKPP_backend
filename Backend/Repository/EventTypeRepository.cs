@@ -53,5 +53,10 @@ namespace Repository
 
             return false;
         }
+
+        public async Task<bool> DeleteEventTypeAsync(string id)
+        {
+            return await database.DeleteById("eventType", id);
+        }
     }
 }

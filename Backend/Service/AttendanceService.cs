@@ -43,5 +43,10 @@ namespace Service
         {
             return await repository.CreateAttendanceAsync(attendance);
         }
+
+        public async Task<bool> DeleteAttendanceAsync(Attendance attendance)
+        {
+            return await repository.DeleteAttendanceAsync(attendance);
+        }
     }
 }

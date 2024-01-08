@@ -4,14 +4,16 @@ namespace Model
 {
     public class Comment
     {
-        public Comment(string eventId, string userId, DateTime date, string message)
+        public Comment(string id, string eventId, string userId, DateTime date, string message)
         {
+            Id = id;
             EventId = eventId;
             UserId = userId;
             Date = date;
             Message = message;
         }
 
+        public string Id { get; set; }
         public string EventId { get; set; }
         public string UserId { get; set; }
         public DateTime Date {  get; set; }
@@ -19,7 +21,8 @@ namespace Model
 
         public static Comment MapDictionaryToComment(Dictionary<string, object> dictionary)
         {
-            return new Comment(dictionary["eventId"].ToString(),
+            return new Comment(dictionary["id"].ToString(),
+                dictionary["eventId"].ToString(),
                 dictionary["userId"].ToString(),
                 ((Timestamp)dictionary["date"]).ToDateTime(),
                 dictionary["message"].ToString()
@@ -30,6 +33,7 @@ namespace Model
         {
             return new Dictionary<string, object>
             {
+                { "id", comment.Id },
                 { "eventId", comment.EventId },
                 { "userId", comment.UserId },
                 { "date", comment.Date },

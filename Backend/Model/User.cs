@@ -4,10 +4,9 @@ namespace Model
 {
     public class User
     {
-        public User(string id, string address, string city, DateTime dob, string firstName, string lastName, List<string> eventTypeIds)
+        public User(string id, string city, DateTime dob, string firstName, string lastName, List<string> eventTypeIds)
         {
             Id = id;
-            Address = address;
             City = city;
             Dob = dob;
             FirstName = firstName;
@@ -16,7 +15,6 @@ namespace Model
         }
 
         public string Id { get; set; }
-        public string Address { get; set; }
         public string City { get; set; }
         public DateTime Dob {  get; set; }
         public string FirstName { get; set; }
@@ -28,7 +26,6 @@ namespace Model
         public static User MapDictionaryToUser(Dictionary<string, object> dictionary)
         {
             return new User(dictionary["id"].ToString(),
-                dictionary["address"].ToString(),
                 dictionary["city"].ToString(),
                 ((Timestamp)dictionary["dob"]).ToDateTime(),
                 dictionary["firstName"].ToString(),
@@ -42,7 +39,6 @@ namespace Model
             return new Dictionary<string, object>
             {
                 { "id", user.Id },
-                { "address", user.Address },
                 { "city", user.City },
                 { "dob", user.Dob },
                 { "firstName", user.FirstName },

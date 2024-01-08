@@ -59,7 +59,6 @@ namespace WebAPI.Controllers
                         ExpiresIn = userCredentials.User.Credential.ExpiresIn.ToString(),
                         UserId = userCredentials.User.Uid,
                         Role = userRecord.CustomClaims["role"].ToString(),
-                        Address = user?.Address,
                         City = user?.City,
                         Dob = (DateTime)(user?.Dob),
                         FirstName = user?.FirstName,
@@ -94,7 +93,7 @@ namespace WebAPI.Controllers
                     };
                     await FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(userCredentials.User.Uid, claims);
 
-                    Model.User user = new Model.User(userCredentials.User.Uid, model.Address, model.City, model.Dob, model.FirstName, model.LastName, model.EventTypeIds);
+                    Model.User user = new Model.User(userCredentials.User.Uid, model.City, model.Dob, model.FirstName, model.LastName, model.EventTypeIds);
 
                     await userService.CreateUserAsync(user);
 
@@ -123,8 +122,6 @@ namespace WebAPI.Controllers
 
     public class UserInfo : UserCredentials
     {
-        public string Address { get; set; }
-
         public string City { get; set; }
 
         public DateTime Dob { get; set; }
@@ -153,9 +150,6 @@ namespace WebAPI.Controllers
 
         [Required]
         public string Email { get; set; }
-
-        [Required]
-        public string Address { get; set; }
 
         [Required]
         public string City { get; set; }

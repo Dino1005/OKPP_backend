@@ -71,5 +71,10 @@ namespace Service
         {
             return await repository.UpdateEventAsync(_event);
         }
+
+        public async Task<bool> DeleteEventAsync(string id)
+        {
+            return await repository.DeleteEventAsync(id);
+        }
     }
 }

@@ -15,7 +15,6 @@ namespace WebAPI.Controllers
             eventTypeService = new EventTypeService();
         }
 
-        [Authorize(Roles = "user, admin")]
         [Route("eventTypes")]
         [HttpGet]
         public async Task<IActionResult> GetEventTypesAsync()
@@ -30,7 +29,6 @@ namespace WebAPI.Controllers
             return BadRequest("No event types found.");
         }
 
-        [Authorize(Roles = "user, admin")]
         [Route("eventTypes/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetEventTypeByIdAsync(string id)
@@ -45,7 +43,7 @@ namespace WebAPI.Controllers
             return BadRequest("Event type not found.");
         }
 
-        [Authorize(Roles = "user, admin")]
+        [Authorize(Roles = "admin")]
         [Route("eventTypes")]
         [HttpPost]
         public async Task<IActionResult> CreateEventTypeAsync(EventTypeREST eventType)
@@ -60,7 +58,7 @@ namespace WebAPI.Controllers
             return BadRequest("Event type not created.");
         }
 
-        [Authorize(Roles = "user, admin")]
+        [Authorize(Roles = "admin")]
         [Route("eventTypes/{id}")]
         [HttpPut]
         public async Task<IActionResult> UpdateEventTypeAsync(string id, EventTypeREST eventType)
@@ -77,6 +75,28 @@ namespace WebAPI.Controllers
             if (result)
             {
                 return Ok(eventType);
+            }
+
+            return BadRequest("Event type not updated.");
+        }
+
+        [Authorize(Roles = "admin")]
+        [Route("eventTypes/{id}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteEventTypeAsync(string id)
+        {
+            var existingEventType = await eventTypeService.GetEventTypeByIdAsync(id);
+
+            if (existingEventType == null)
+            {
+                return BadRequest("Event type does not exist.");
+            }
+
+            var result = await eventTypeService.DeleteEventTypeAsync(id);
+
+            if (result)
+            {
+                return Ok("Event type deleted.");
             }
 
             return BadRequest("Event type not updated.");

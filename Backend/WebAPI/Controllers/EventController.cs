@@ -15,7 +15,6 @@ namespace WebAPI.Controllers
             eventService = new EventService();
         }
 
-        [Authorize(Roles = "user, admin")]
         [Route("events")]
         [HttpGet]
         public async Task<IActionResult> GetEventsAsync()
@@ -30,7 +29,6 @@ namespace WebAPI.Controllers
             return BadRequest("No events found.");
         }
 
-        [Authorize(Roles = "user, admin")]
         [Route("events/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetEventByIdAsync(string id)
@@ -45,7 +43,7 @@ namespace WebAPI.Controllers
             return BadRequest("Event not found.");
         }
 
-        [Authorize(Roles = "user, admin")]
+        [Authorize(Roles = "admin")]
         [Route("events")]
         [HttpPost]
         public async Task<IActionResult> CreateEventAsync(EventREST _event)
@@ -60,7 +58,7 @@ namespace WebAPI.Controllers
             return BadRequest("Event not created.");
         }
 
-        [Authorize(Roles = "user, admin")]
+        [Authorize(Roles = "admin")]
         [Route("events/{id}")]
         [HttpPut]
         public async Task<IActionResult> UpdateEventAsync(string id, EventREST _event)
@@ -77,6 +75,28 @@ namespace WebAPI.Controllers
             if (result)
             {
                 return Ok(_event);
+            }
+
+            return BadRequest("Event not updated.");
+        }
+
+        [Authorize(Roles = "admin")]
+        [Route("events/{id}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteEventAsync(string id)
+        {
+            var existingEvent = await eventService.GetEventByIdAsync(id);
+
+            if (existingEvent == null)
+            {
+                return BadRequest("Event does not exist.");
+            }
+
+            var result = await eventService.DeleteEventAsync(id);
+
+            if (result)
+            {
+                return Ok("Event deleted.");
             }
 
             return BadRequest("Event not updated.");

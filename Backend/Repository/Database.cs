@@ -35,5 +35,18 @@ namespace Repository
 
             return entities.Where(e => ids.Contains(e["id"].ToString())).ToList();
         }
+
+        public async Task<bool> DeleteById(string collection, string id)
+        {
+            DocumentReference documentReference = db.Collection(collection).Document(id);
+
+            var result = await documentReference.DeleteAsync();
+            if (result != null)
+            {
+                return true;
+            }
+
+            return false;
+        }   
     }
 }

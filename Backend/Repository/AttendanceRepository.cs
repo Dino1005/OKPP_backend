@@ -30,5 +30,19 @@ namespace Repository
 
             return false;
         }
+
+        public async Task<bool> DeleteAttendanceAsync(Attendance attendance)
+        {
+            var attendaceId = attendance.EventId + attendance.UserId;
+            DocumentReference documentReference = database.db.Collection("attendance").Document(attendaceId);
+
+            if(documentReference != null)
+            {
+                await documentReference.DeleteAsync();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

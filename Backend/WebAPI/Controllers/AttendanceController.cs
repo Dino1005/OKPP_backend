@@ -29,6 +29,31 @@ namespace WebAPI.Controllers
 
             return BadRequest("Attendance not created.");
         }
+
+        [Authorize(Roles = "user, admin")]
+        [Route("attendances")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAttendanceAsync(AttendanceREST attendance)
+        {
+            if (User.Claims.Any())
+            {
+                var userId = User.Claims.FirstOrDefault(c => c.Type == "id").Value;
+
+                if(userId != attendance.UserId)
+                {
+                    return BadRequest("You can't delete other user's attendance.");
+                }
+            }
+
+            var result = await attendanceService.DeleteAttendanceAsync(new Attendance(attendance.EventId, attendance.UserId));
+
+            if (result)
+            {
+                return Ok("Attendance deleted.");
+            }
+
+            return BadRequest("Attendance not deleted.");
+        }
     }
 
     public class AttendanceREST

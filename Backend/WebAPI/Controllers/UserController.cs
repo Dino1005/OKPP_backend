@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
                 return BadRequest("User not found.");
             }
 
-            var result = await userService.UpdateUserAsync(new User(id, user.Address, user.City, user.Dob, user.FirstName, user.LastName, user.EventTypeIds));
+            var result = await userService.UpdateUserAsync(new User(id, user.City, user.Dob, user.FirstName, user.LastName, user.EventTypeIds));
 
             if (result)
             {
@@ -70,8 +70,6 @@ namespace WebAPI.Controllers
 
     public class UserREST
     {
-        public string Address { get; set; }
-
         public string City { get; set; }
 
         public DateTime Dob { get; set; }

@@ -41,5 +41,10 @@ namespace Service
         {
             return await repository.UpdateEventTypeAsync(eventType);
         }
+
+        public async Task<bool> DeleteEventTypeAsync(string id)
+        {
+            return await repository.DeleteEventTypeAsync(id);
+        }
     }
 }
