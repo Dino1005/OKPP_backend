@@ -107,6 +107,64 @@ namespace WebAPI.Controllers
 
             return BadRequest("Failed to login.");
         }
+
+        [Authorize(Roles = "user, admin")]
+        [Route("/update-password/{password}")]
+        [HttpGet]
+        public async Task<IActionResult> UpdatePasswordAsync(string password)
+        {
+            try
+            {
+                if(client.User != null)
+                {
+                    await client.User.ChangePasswordAsync(password);
+                }
+            }
+            catch (Firebase.Auth.FirebaseAuthException ex)
+            {
+                return BadRequest(FirebaseHelper.HandleFirebaseError(ex));
+            }
+
+            return Ok("Password updated.");
+        }
+
+        [Authorize(Roles = "user, admin")]
+        [Route("/reset-password/{email}")]
+        [HttpGet]
+        public async Task<IActionResult> ResetPasswordAsync(string email)
+        {
+            try
+            {
+                await client.ResetEmailPasswordAsync(email);
+            }
+            catch (Firebase.Auth.FirebaseAuthException ex)
+            {
+                return BadRequest(FirebaseHelper.HandleFirebaseError(ex));
+            }
+
+            return Ok("Password reset request sent.");
+        }
+
+        [Authorize(Roles = "user, admin")]
+        [Route("/logout")]
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            try
+            {
+                if(client.User == null) 
+                {
+                    return BadRequest("User not logged in.");
+                }
+                client.SignOut();
+            }
+            catch (Firebase.Auth.FirebaseAuthException ex)
+            {
+                return BadRequest(FirebaseHelper.HandleFirebaseError(ex));
+            }
+
+            return Ok("Successfully logged out.");
+        }
     }
 
     public class UserCredentials

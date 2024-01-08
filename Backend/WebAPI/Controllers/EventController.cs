@@ -1,3 +1,5 @@
+using Google.Cloud.Storage.V1;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -100,6 +102,49 @@ namespace WebAPI.Controllers
             }
 
             return BadRequest("Event not updated.");
+        }
+
+        [Authorize(Roles = "admin")]
+        [Route("events/image")]
+        [HttpPost]
+        public async Task<IActionResult> UploadImage()
+        {
+            string bucketName = "okpp-a6a02.appspot.com";
+
+            try
+            {
+                var file = Request.Form.Files[0];
+
+                if (file.Length > 0)
+                {
+                    var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(memoryStream);
+                        memoryStream.Position = 0;
+
+                        var credential = GoogleCredential.FromFile("./firebaseConfig.json");
+                        var storage = StorageClient.Create(credential);
+
+                        var objectName = $"{fileName}";
+
+                        await storage.UploadObjectAsync(bucketName,objectName,null,memoryStream);
+
+                        var imageUrl = $"https://storage.googleapis.com/{bucketName}/{objectName}";
+
+                        return Ok(imageUrl);
+                    }
+                }
+                else
+                {
+                    return BadRequest("Image not uploaded.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error uploading image: {ex.Message}");
+            }
         }
     }
 
