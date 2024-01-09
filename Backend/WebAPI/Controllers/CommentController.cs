@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCommentAsync(CommentREST comment)
         {
-            var result = await commentService.CreateCommentAsync(new Comment(null, comment.EventId, comment.UserId, DateTime.Now, comment.Message));
+            var result = await commentService.CreateCommentAsync(new Comment(null, comment.EventId, comment.UserId, DateTime.UtcNow, comment.Message));
 
             if (result)
             {
