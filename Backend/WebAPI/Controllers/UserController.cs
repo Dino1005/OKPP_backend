@@ -15,7 +15,6 @@ namespace WebAPI.Controllers
            userService = new UserService();
         }
 
-        [Authorize(Roles = "user, admin")]
         [Route("users")]
         [HttpGet]
         public async Task<IActionResult> GetUsersAsync()
@@ -30,7 +29,6 @@ namespace WebAPI.Controllers
             return BadRequest("No users found.");
         }
 
-        [Authorize(Roles = "user, admin")]
         [Route("users/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetUserByIdAsync(string id)
